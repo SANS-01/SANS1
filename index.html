@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Webstore Sederhana</title>
+    <style>
+        /* CSS */
+        body { font-family: Arial, sans-serif; text-align: center; background-color: #f9f9f9; margin: 0; padding: 20px; }
+        .product { display: inline-block; border: 1px solid #000000; border-radius: 8px; margin: 10px; padding: 10px; width: 150px; }
+        .product img { width: 100px; height: 100px; }
+        button { background-color: #28a745; color: #fff; border: none; padding: 5px 10px; border-radius: 5px; cursor: pointer; }
+        button:hover { background-color: #218838; }
+        #cart { list-style: none; padding: 0; margin-top: 20px; }
+        #checkoutBtn { margin-top: 20px; background-color: #007bff; }
+        #checkoutBtn:hover { background-color: #0056b3; }
+
+        /* Kontainer untuk Kontak dan Produk */
+        .contact-product-container {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 30px;
+            padding: 20px;
+            background-color: rgba(255, 255, 255, 0.8);
+            border-radius: 8px;
+        }
+        .contact-info {
+            width: 45%;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            background-color: #fff;
+        }
+        .product-list {
+            width: 45%;
+        }
+
+        body {
+            background-color: rgba(55, 55, 77, 0.24);
+        }
+
+        /* Form Data Diri */
+        .checkout-form {
+            display: none;
+            margin-top: 20px;
+            padding: 20px;
+            border-radius: 8px;
+            background-color: #fff;
+            border: 1px solid #ddd;
+        }
+        .checkout-form input {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        .checkout-form button {
+            width: 100%;
+            background-color: #007bff;
+            border: none;
+            padding: 10px;
+            border-radius: 4px;
+            color: white;
+            font-size: 16px;
+        }
+        .checkout-form button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <!-- HTML -->
+    <h1>Webstore jaya abadi</h1>
+    
+    <!-- Produk -->
+    <div class="product">
+        <p>PRODUK 1</p>
+        <img src="RB 951.jpeg" alt="Produk 1">
+        <p>RB 951</p>
+        <p>Rp 4.500.000</p>
+        <button onclick="addToCart('Produk 1')">Beli</button>
+    </div>
+    <div class="product">
+        <p>PRODUK 2</p>
+        <img src="SWITCH.jpeg" alt="Produk 2">
+        <p>Switch CRS309-1G-8S</p>
+        <p>Rp 50.000.000</p>
+        <button onclick="addToCart('Produk 2')">Beli</button>
+    </div>
+    <div class="product">
+        <p>PRODUK 3</p>
+        <img src="HTB.jpeg" alt="Produk 3">
+        <p>HTB - 3100</p>
+        <p>Rp 143.208,00</p>
+        <button onclick="addToCart('Produk 3')">Beli</button>
+    </div>
+
+    <h2>Keranjang</h2>
+    <ul id="cart"></ul>
+    <button id="checkoutBtn" onclick="showCheckoutForm()">Checkout</button>
+
+    <!-- Kontainer untuk menampilkan kontak dan produk -->
+    <div class="contact-product-container">
+        <div class="contact-info">
+            <h3>Kontak Pemilik</h3>
+            <p>Email: ikrom@gmail.com</p>
+            <p>Telepon: 08123456789</p>
+        </div>
+
+        <!-- Daftar produk (sama dengan sebelumnya) -->
+        <div class="product-list">
+            <h3>Daftar Produk</h3>
+            <ul>
+                <li>RB 951</li>
+                <li>Switch CRS309-1G-8S</li>
+                <li>HTB - 3100</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- Form Data Diri Pembeli -->
+    <div class="checkout-form" id="checkoutForm">
+        <h3>Data Diri Pembeli</h3>
+        <form onsubmit="submitCheckout(event)">
+            <input type="text" id="fullName" placeholder="Nama Lengkap" required>
+            <input type="email" id="email" placeholder="Email" required>
+            <input type="text" id="address" placeholder="Alamat" required>
+            <input type="tel" id="phone" placeholder="Nomor Telepon" required>
+            <button type="submit">Lanjutkan Pembayaran</button>
+        </form>
+    </div>
+
+    <script>
+        // JavaScript
+        const cartItems = [];
+
+        function addToCart(product) {
+            cartItems.push(product);
+            let item = document.createElement("li");
+            item.textContent = product;
+            document.getElementById("cart").appendChild(item);
+        }
+
+        function showCheckoutForm() {
+            if (cartItems.length === 0) {
+                alert("Keranjang Anda kosong.");
+            } else {
+                document.getElementById("checkoutForm").style.display = "block";
+            }
+        }
+
+        function submitCheckout(event) {
+            event.preventDefault();
+
+            // Mengambil data dari form
+            const fullName = document.getElementById("fullName").value;
+            const email = document.getElementById("email").value;
+            const address = document.getElementById("address").value;
+            const phone = document.getElementById("phone").value;
+
+            if (fullName && email && address && phone) {
+                alert(`Pembelian berhasil!\nNama: ${fullName}\nEmail: ${email}\nAlamat: ${address}\nTelepon: ${phone}\nProduk: ${cartItems.join(", ")}`);
+                // Kosongkan keranjang setelah checkout
+                cartItems.length = 0;
+                document.getElementById("cart").innerHTML = "";
+                document.getElementById("checkoutForm").reset();
+                document.getElementById("checkoutForm").style.display = "none"; // Sembunyikan form checkout setelah submit
+            }
+        }
+    </script>
+</body>
+</html>
